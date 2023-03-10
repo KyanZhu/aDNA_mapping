@@ -1,0 +1,28 @@
+==== Scripts Structure ====
+	mapping.parl.sh
+		|
+		·--mapping.parl
+		|
+		·--stats.sh
+		|
+		·--mapDamage.sh
+		|
+		·--trimBam.sh
+		|
+		·--pileupCaller.sh
+		|
+		·--contaminate.parl.sh
+		|
+		.--softsource.txt
+
+- 在mapping.parl.sh中设置主要路径
+- 首次使用需设置 ./softsource.txt 及 ./tools/contaminate 下相关路径
+- 其余脚本放在相同目录下
+- ./tools/headcrop脚本处理raw sequence问题
+
+==== Requires R packages ====
+library(reshape2)
+library(ggplot2)
+library(dplyr)
+library(magrittr)
+library(ggsci)

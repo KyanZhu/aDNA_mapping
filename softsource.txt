@@ -1,0 +1,14 @@
+#!/bin/sh
+AdapterRemoval=/home/administrator/miniconda3/bin/AdapterRemoval
+Dedup=/home/administrator/miniconda3/bin/dedup
+bwa=/home/administrator/miniconda3/bin/bwa
+samtools=/home/KongyangZhu/software/samtools-1.15.1/samtools
+fastqc=/home/administrator/miniconda3/bin/fastqc
+ref=/home/administrator/data/Reference_Genomes/Human/hs37d5.fa
+pmdtools=$(pwd)/tools/pmdtools
+preseq_sh=$(pwd)/tools/preseq
+mapDamage_plot=$(pwd)/tools/mapDamage_plot.R
+contam=$(pwd)/tools/contaminate.sh
+rxy_dir=$(pwd)/tools/Rxy
+bc=$(pwd)/tools/bc.py
+subbc=$(pwd)/tools/subbc.py
