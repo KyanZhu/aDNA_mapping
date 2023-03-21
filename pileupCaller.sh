@@ -1,7 +1,7 @@
 #!/bin/sh
-# @Time : 2023/03/06 12:13
+# @Time : 2023/03/21 12:13
 # @Author : KyanZhu
-# @Version : V 0.2
+# @Version : V 0.3
 # @File : pileupCaller
 
 
@@ -14,7 +14,7 @@ mkdir -p ${output_dir} ; cd ${output_dir}
 bamfile=$(ls ${samples_dir}/*.trim.bam)
 samples=""
 bamfilein=""
-panels="1240k 2.2M"
+panels="HO 1240k 2.2M"
 for i in ${bamfile};do
         bamfilein="${bamfilein} ${i}"
         samples=${samples},$(basename ${i} .trim.bam)
