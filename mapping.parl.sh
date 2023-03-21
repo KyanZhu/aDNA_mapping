@@ -30,9 +30,10 @@ done > mapping.parl
 
 # Mapping
 cat mapping.parl | parallel -j ${parallel_thread}
+if [ $? -eq 0 ];then echo "Mapping Done !" ; else echo "Mapping Failed !" ; exit 1 ; fi
 
 # Post-Processing
-sh stats.sh
+sh stats.sh ${bc}
 sh mapDamage.sh ${ref}
 sh trimBam.sh ${cut_bp} ${parallel_thread}  # default: $1=4, $2=5
 sh pileupCaller.sh ${ref}

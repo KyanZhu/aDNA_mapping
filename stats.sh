@@ -9,7 +9,7 @@
 alias rmsp='sed "s/^\s*//g" | sed "s/[[:blank:]]\+/\t/g"'
 samples_dir=$(dirname $(pwd))/Bamfiles
 output_dir=$(dirname $(pwd))/stats
-# bc=$(pwd)/bc.py
+bc=$1
 samples=$(ls -l ${samples_dir} | grep drwx | awk '{print $9}')
 mkdir -p ${output_dir} ; cd ${output_dir}
 
@@ -67,6 +67,14 @@ for i in ${cov};do
     echo "%"
 done > mapped.coverage
 
+# 11. #SNPs 1240k
+rm -rf HO.snps 1240k.snps 2200.snps ; touch HO.snps 1240k.snps 2200.snps
+for i in ${samples};do
+    cat $(dirname $(pwd))/pileupCaller/HO.coverage    | grep -w ${i} | awk '{print $2}' >> HO.snps
+    cat $(dirname $(pwd))/pileupCaller/1240k.coverage | grep -w ${i} | awk '{print $2}' >> 1240k.snps
+    cat $(dirname $(pwd))/pileupCaller/2.2M.coverage  | grep -w ${i} | awk '{print $2}' >> 2200.snps
+done
+
 # Summary
 # Header
 echo -e "Samples\t\
@@ -79,7 +87,10 @@ mapped reads\t\
 mapped bases\t\
 MT reads\t\
 average quality\t\
-coverage" > header.tmp
+coverage\t\
+#SNPs HO\t\
+#SNPs 1240k\t\
+#SNPs 2.2M" > header.tmp
 
 # Body
 body="aln.endogenous_rate.result \
@@ -91,7 +102,10 @@ mapped.reads \
 mapped.bases \
 mapped.MTreads \
 average.quality \
-mapped.coverage"
+mapped.coverage \
+HO.snps \
+1240k.snps \
+2200.snps"
 paste ${body} > body.tmp
 
 # Annotation
@@ -107,5 +121,7 @@ for i in "Annotation";do
     echo "# mapped MT reads : mapped reads from Samtools idxstats"
     echo "# average quality : average base quality of mapped bases"
     echo "# coverage : mapped bases/3095693981*100%"
+    echo "# #SNPs 1240k : #SNPs coverage on 1240k"
+    echo "# #SNPs 2.2M : #SNPs coverage on 2.2M"
 done > annotation.tmp
 cat header.tmp body.tmp annotation.tmp > Summary.xls ; rm *.tmp ${body}
