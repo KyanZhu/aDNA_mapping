@@ -33,14 +33,18 @@ cat mapping.parl | parallel -j ${parallel_thread}
 if [ $? -eq 0 ];then echo "Mapping Done !" ; else echo "Mapping Failed !" ; exit 1 ; fi
 
 # Post-Processing
-sh stats.sh ${bc}
 sh mapDamage.sh ${ref}
 sh trimBam.sh ${cut_bp} ${parallel_thread}  # default: $1=4, $2=5
 sh pileupCaller.sh ${ref}
+sh stats.sh ${bc}
+sh gender.sh
 cd ${output_dir}/pmdtools ; pdfunite *.pdf pmdtools.pdf ; zip pmdtools.zip *.pdf
 mkdir -p ${output_dir}/Summary ; cd ${output_dir}/Summary ; cp ../pmdtools/*.zip ./ ; cp ../mapDamage/*.zip ./ ; cp ../pileupCaller/*.coverage ./ ; cp ../stats/*.xls ./
 name=$(basename $(dirname $(pwd))).zip ; zip ${name} *
 mv ${name} ../ ; rm * ; cd ../ ; rmdir Summary
 notify ${text_message}
-sh contaminate.parl.sh && notify "contaminate estimation Done !"
+# contamination
+cd scripts
+sh contaminate.parl.sh ${contam}
+notify "contaminate estimation Done !"
 # sh preseq.sh  # preseq if need

@@ -12,3 +12,4 @@ contam=$(pwd)/tools/contaminate.sh
 rxy_dir=$(pwd)/tools/Rxy
 bc=$(pwd)/tools/bc.py
 subbc=$(pwd)/tools/subbc.py
+mappedreads=$(pwd)/mappedreads.sh

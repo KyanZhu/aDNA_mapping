@@ -75,6 +75,13 @@ for i in ${samples};do
     cat $(dirname $(pwd))/pileupCaller/2.2M.coverage  | grep -w ${i} | awk '{print $2}' >> 2200.snps
 done
 
+# 12. #gender
+rm -rf Rx Ry; touch Rx Ry
+for i in ${samples};do
+    cat $(dirname $(pwd))/gender/samples.sex | grep -w ${i} | awk '{print $2}' >> Rx
+    cat $(dirname $(pwd))/gender/samples.sex | grep -w ${i} | awk '{print $3}' >> Ry
+done
+
 # Summary
 # Header
 echo -e "Samples\t\
@@ -90,7 +97,9 @@ average quality\t\
 coverage\t\
 #SNPs HO\t\
 #SNPs 1240k\t\
-#SNPs 2.2M" > header.tmp
+#SNPs 2.2M\t\
+Rx\t\
+Ry" > header.tmp
 
 # Body
 body="aln.endogenous_rate.result \
@@ -105,7 +114,9 @@ average.quality \
 mapped.coverage \
 HO.snps \
 1240k.snps \
-2200.snps"
+2200.snps \
+Rx \
+Ry"
 paste ${body} > body.tmp
 
 # Annotation
@@ -121,7 +132,10 @@ for i in "Annotation";do
     echo "# mapped MT reads : mapped reads from Samtools idxstats"
     echo "# average quality : average base quality of mapped bases"
     echo "# coverage : mapped bases/3095693981*100%"
+    echo "# #SNPs HO : #SNPs coverage on HO"
     echo "# #SNPs 1240k : #SNPs coverage on 1240k"
     echo "# #SNPs 2.2M : #SNPs coverage on 2.2M"
+    echo '# Rx : Sex assignment by Rx'
+    echo '# Ry : Sex assignment by Ry'
 done > annotation.tmp
 cat header.tmp body.tmp annotation.tmp > Summary.xls ; rm *.tmp ${body}

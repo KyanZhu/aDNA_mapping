@@ -43,8 +43,8 @@ mkdir -p ${output_dir}/fastqc
 ${fastqc} -q -t ${thread} -o ${output_dir}/fastqc ${sample}.collapsed.gz
 
 # bwa aln & samse
-bwa aln -l 1024 -n 0.01 -t ${thread} ${reference} ${sample}.collapsed.gz > ${sample}.sai
-bwa samse -r "@RG\tID:${RGID}\tLB:${RGLB}\tSM:${RGSM}\tPL:${RGPL}" ${reference} ${sample}.sai ${sample}.collapsed.gz | samtools view -Shb -o ${sample}.aln.bam -
+bwa aln -l 1024 -n 0.01 -t ${thread} ${ref} ${sample}.collapsed.gz > ${sample}.sai
+bwa samse -r "@RG\tID:${RGID}\tLB:${RGLB}\tSM:${RGSM}\tPL:${RGPL}" ${ref} ${sample}.sai ${sample}.collapsed.gz | samtools view -Shb -o ${sample}.aln.bam -
 
 # aln.flagstat
 ${samtools} flagstat -@ ${thread} ${sample}.aln.bam > ${sample}.aln.flagstats
@@ -66,14 +66,14 @@ ${samtools} idxstats ${sample}.bam > ${sample}.idxstats
 rm -v ${sample}.{sai,settings,sort.hist,sort.log}
 
 # Extract mapped reads
-sh mappedreads.sh ${sample}.bam ${thread}
+sh ${mappedreads} ${sample}.bam ${thread}
 
 # Sex Determination
-sh ${rxy_dir}/sexRxy.sh ${sample}.mapped.bam .mapped.bam ${thread}
+sh ${rxy_dir}/sexRxy.sh ${sample}.mapped.bam .mapped.bam ${thread} ${rxy_dir}
 
 # MapDamage
 mkdir -p ${output_dir}/mapDamage
-mapDamage -i ${sample}.mapped.bam -r ${reference} -n 200000 -t ${sample} -d ${output_dir}/mapDamage/${sample}
+mapDamage -i ${sample}.mapped.bam -r ${ref} -n 200000 -t ${sample} -d ${output_dir}/mapDamage/${sample}
 
 # PMDtools
 total=$(cat ${sample}.mapped.stats | grep "reads mapped:" | awk '{print $4}')

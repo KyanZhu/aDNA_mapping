@@ -9,6 +9,7 @@
 bamfile=$1
 suffix=$2
 thread=$3
+rxy_dir=$4
 # rxy_dir=/home/KongyangZhu/sh/sex_determination/
 
 output=$(basename ${bamfile} ${suffix})

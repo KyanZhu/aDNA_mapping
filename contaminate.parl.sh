@@ -2,7 +2,7 @@
 
 
 thread=5
-# contam=/home/KongyangZhu/sh/contamination/contaminate.sh
+contam=$1
 samples_dir=$(dirname $(pwd))/Bamfiles
 output_dir=$(dirname $(pwd))/contamination
 samples=$(ls -l ${samples_dir} | grep drwx | awk '{print $9}')
